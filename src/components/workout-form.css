@@ -24,3 +24,10 @@
     text-align: center;
     margin-bottom: 20px;
 }
+
+/* buttons */
+
+.button-container button {
+    display: inline-block; /* or "inline" */
+    margin-right: 10px; /* Optional: Add some space between the buttons */
+}
