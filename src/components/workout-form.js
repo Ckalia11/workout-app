@@ -3,17 +3,28 @@ import "./workout-form.css";
 
 export default function WorkoutForm() {
 
+    const currDate = new Date();
+    const formattedDate = currDate.toISOString().split('T')[0]
+
     const initialFormData = {
         workoutName: "",
+        workoutDate: formattedDate,
         workoutType: "push",
+        workoutWeightQuantity: "",
+        workoutWeightUnit: "kg",
         workoutSets: "",
         workoutReps: "",
     }
 
     const [formData, setFormData] = useState(initialFormData);
 
+    const resetForm = () => {
+        setFormData(initialFormData);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        resetForm();
         console.log(formData);
     }
 
@@ -24,18 +35,18 @@ export default function WorkoutForm() {
             [name]: value,
         }) )
     }
-
-    const resetForm = () => {
-        setFormData(initialFormData);
-    }
     
     return (
     <div className = "container-fluid">
         <h3 className = "form-title">Add Workout</h3>
         <form id = "workout-form" method="post" onSubmit={handleSubmit}>
-                <div className = "form-group">
+                <div className = "form-group col-md-5">
                     <label className="label" htmlFor = "workoutName">Workout Name</label>
                     <input id = "workout-name" className = "form-control" name = "workoutName" value = {formData.workoutName} placeholder="Shoulder Press" type = "text" onChange={handleChange} />
+                </div>
+                <div className="form-group col-md-3">
+                    <label className="label" htmlFor="workoutDate">Date</label>
+                    <input id = "workout-date" className="form-control" type = "date" name = "workoutDate" value = {formData.workoutDate} onChange={handleChange} max={formattedDate} />
                 </div>
                 <div className="workout-type">
                     <p className="label">Workout Type</p>
@@ -52,13 +63,28 @@ export default function WorkoutForm() {
                         </label>
                     </div>
                 </div>
-                <div className="form-group">
-                    <label className="label" htmlFor = "workoutSets">Sets</label>
-                    <input id = 'workout-sets' className="form-control" name = "workoutSets" type="number" value = {formData.workoutSets} placeholder="0" onChange={handleChange} min="0"/>
+                <div className="row">
+                    <div className="form-group col-md-3">
+                        <label className="label" htmlFor="workoutWeightQuantity">Weight</label>
+                        <input id = "weight" className="form-control" name = "workoutWeightQuantity" type = "number" value = {formData.workoutWeightQuantity} placeholder="0" onChange={handleChange} min="0" />
+                    </div>
+                    <div className="form-group col-md-2">
+                        <label className="label" htmlFor="workoutWeightUnit">Unit</label>
+                        <select id="inputState" name = "workoutWeightUnit" className="form-control" value={formData.workoutWeightUnit} onChange={handleChange}>
+                            <option>Kg</option>
+                            <option>lbs</option>
+                        </select>
+                    </div>
                 </div>
-                <div className="form-group">
-                    <label className="label" htmlFor = "workoutReps">Reps</label>
-                    <input id = 'workout-reps' className="form-control" name = "workoutReps" value = {formData.workoutReps} onChange={handleChange} placeholder="0" type="number" min="0"/>
+                <div className="row">
+                    <div className="form-group col-md-3">
+                        <label className="label" htmlFor = "workoutSets">Sets</label>
+                        <input id = 'workout-sets' className="form-control" name = "workoutSets" type="number" value = {formData.workoutSets} placeholder="0" onChange={handleChange} min="0"/>
+                    </div>
+                    <div className="form-group col-md-3">
+                        <label className="label" htmlFor = "workoutReps">Reps</label>
+                        <input id = 'workout-reps' className="form-control" name = "workoutReps" value = {formData.workoutReps} onChange={handleChange} placeholder="0" type="number" min="0"/>
+                    </div>
                 </div>
                 <div className="button-container">
                     <button type="submit" className="btn btn-primary">Submit</button>
