@@ -1,13 +1,8 @@
 import React, {useState} from "react";
 import "./workout-form.css";
+import workoutData from "../workouts/workouts.json";
 
 export default function WorkoutForm() {
-
-    let workouts = [
-        "shoulder press",
-        "bench press",
-        "bicep curl",
-    ]
 
     const currDate = new Date();
     const formattedDate = currDate.toISOString().split('T')[0];
@@ -29,7 +24,7 @@ export default function WorkoutForm() {
         handleChange(e);
         const input = e.target.value;
         const search = input.trim().toLowerCase();
-        const res = workouts.filter(workout => workout.startsWith(search));
+        const res = workoutData.workouts.filter(workout => workout.startsWith(search));
         setSearchResults(res);
     }
 
@@ -68,7 +63,7 @@ export default function WorkoutForm() {
         <form id = "workout-form" method="post" onSubmit={handleSubmit}>
                 <div className = "search-container form-group col-md-5">
                     <label className="label" htmlFor = "workoutName">Workout Name</label>
-                    <input id = "workout-name" className = "form-control" name = "workoutName" value = {formData.workoutName} placeholder="shoulder press" type = "text" onChange={handleSearchChange} onBlur={() => setSearchResults([])} />
+                    <input id = "workout-name" className = "form-control" name = "workoutName" value = {formData.workoutName} placeholder="shoulder press" type = "text" maxLength={30} onChange={handleSearchChange} onBlur={() => setSearchResults([])} />
                     {searchResults.length > 0 && (
                     <ul className="search-results">
                         {searchResults.map((result, index) => (
