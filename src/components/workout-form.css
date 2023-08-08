@@ -31,3 +31,45 @@
     display: inline-block; /* or "inline" */
     margin-right: 10px; /* Optional: Add some space between the buttons */
 }
+
+/* search */
+
+.search-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .search-results {
+    position: absolute;
+    top: 100%; /* Position the results below the input */
+    left: 0;
+    width: 100%;
+    border: 1px solid #666666; /* Light gray border color */
+    background-color: #FFFFFF; /* White background color */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+    border-radius: 4px; /* Rounded corners */
+    margin-top: 5px; /* Add a small margin at the top */
+    max-height: 200px; /* Limit the height of the results container */
+    overflow-y: auto; /* Add vertical scroll if needed */
+    padding: 0; /* Remove default padding */
+    list-style-type: none;
+}
+
+/* Styling for each search result item */
+.search-results li {
+    padding: 10px;
+    border-bottom: 1px solid #888888; /* Light gray border between items */
+    transition: background-color 0.2s ease; /* Smooth background color transition on hover */
+}
+
+.search-results li:last-child {
+    border-bottom: none; /* Remove border from the last item */
+}
+
+/* Hover effect for search result items */
+.search-results li:hover {
+    background-color: whitesmoke;; /* Slightly darker background on hover */
+    cursor: pointer;
+}
+
+  
