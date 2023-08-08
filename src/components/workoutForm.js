@@ -1,8 +1,15 @@
 import React, {useState} from "react";
-import "./workout-form.css";
+import "./workoutForm.css";
 import workoutData from "../workouts/workouts.json";
+import SearchField from "./searchField";
 
 export default function WorkoutForm() {
+
+    let tags = [
+        "cardio",
+        "muscle",
+        "memory",
+    ]
 
     const currDate = new Date();
     const formattedDate = currDate.toISOString().split('T')[0];
@@ -16,28 +23,13 @@ export default function WorkoutForm() {
         workoutSets: "",
         workoutReps: "",
         workoutNote: "",
+        workoutTag: "",
     }
 
     const [formData, setFormData] = useState(initialFormData);
-    const [searchResults, setSearchResults] = useState([]);
-
-    const handleSearchChange = (e) => {
-        handleChange(e);
-        const input = e.target.value;
-        const search = input.trim().toLowerCase();
-        const res = workoutData.workouts.filter(workout => workout.startsWith(search));
-        setSearchResults(res);
-    }
-
-    const handleSearchSelection = (e, result) => {
-        let name = "workoutName";
-        handleSetFormData(name, result);
-        setSearchResults([]);
-      };
 
     const resetForm = () => {
         setFormData(initialFormData);
-        setSearchResults([]);
     }
 
     const handleSubmit = (e) => {
@@ -57,24 +49,21 @@ export default function WorkoutForm() {
             [name]: value,
         }))
     }
-    
+
     return (
     <div className = "container-fluid">
         <h3 className = "form-title">Add Workout</h3>
         <form id = "workout-form" method="post" onSubmit={handleSubmit}>
-                <div className = "search-container form-group col-md-5">
-                    <label className="label" htmlFor = "workoutName">Workout Name</label>
-                    <input id = "workout-name" className = "form-control" name = "workoutName" value = {formData.workoutName} placeholder="shoulder press" type = "text" maxLength={30} onChange={handleSearchChange} onBlur={() => setSearchResults([])} />
-                    {searchResults.length > 0 && (
-                    <ul className="search-results">
-                        {searchResults.map((result, index) => (
-                            <li className = "clicked" key={index} onMouseDown={(e) => handleSearchSelection(e, result)}>
-                            {result}
-                            </li>
-                        ))}
-                    </ul>
-                    )}
-                </div>
+                <SearchField 
+                    label = "Workout Name"
+                    id = "workout-name"
+                    name = "workoutName"
+                    placeholder = "Shoulder Press"
+                    maxLength = "30"
+                    searchableList = {workoutData.workouts}
+                    search = {formData.workoutName}
+                    setFormData = {handleSetFormData}
+                />
                 <div className="form-group col-md-3">
                     <label className="label" htmlFor="workoutDate">Date</label>
                     <input id = "workout-date" className="form-control" type = "date" name = "workoutDate" value = {formData.workoutDate} onChange={handleChange} max={formattedDate} />
@@ -121,6 +110,16 @@ export default function WorkoutForm() {
                     <label className = "label" htmlFor="workoutNote">Notes</label>
                     <textarea id = 'workout-note' className="form-control" name = "workoutNote" value = {formData.workoutNote} rows = "2" onChange={handleChange} placeholder="Add a note" />
                 </div>
+                <SearchField 
+                    label = "Tags"
+                    id = "workout-tags"
+                    name = "workoutTag"
+                    placeholder = "Add tags"
+                    maxLength = "20"
+                    searchableList = {tags}
+                    search = {formData.workoutTag}
+                    setFormData = {handleSetFormData}
+                />
                 <div className="button-container">
                     <button type="submit" className="btn btn-primary">Submit</button>
                     <button type = "button" className="btn btn-secondary" onClick={resetForm}>Reset</button>
