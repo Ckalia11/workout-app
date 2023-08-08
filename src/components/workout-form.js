@@ -15,6 +15,7 @@ export default function WorkoutForm() {
         workoutWeightUnit: "kg",
         workoutSets: "",
         workoutReps: "",
+        workoutNote: "",
     }
 
     const [formData, setFormData] = useState(initialFormData);
@@ -115,6 +116,10 @@ export default function WorkoutForm() {
                         <label className="label" htmlFor = "workoutReps">Reps</label>
                         <input id = 'workout-reps' className="form-control" name = "workoutReps" value = {formData.workoutReps} onChange={handleChange} placeholder="0" type="number" min="0"/>
                     </div>
+                </div>
+                <div className="form-group col-md-5">
+                    <label className = "label" htmlFor="workoutNote">Notes</label>
+                    <textarea id = 'workout-note' className="form-control" name = "workoutNote" value = {formData.workoutNote} rows = "2" onChange={handleChange} placeholder="Add a note" />
                 </div>
                 <div className="button-container">
                     <button type="submit" className="btn btn-primary">Submit</button>
