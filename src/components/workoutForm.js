@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./workoutForm.css";
 import workoutData from "../workouts/workouts.json";
+// components
 import SearchField from "./searchField";
+import Tags from "./tags";
 
 export default function WorkoutForm() {
 
-    let tags = [
+    let tagsData = [
         "cardio",
         "muscle",
         "memory",
@@ -27,15 +29,19 @@ export default function WorkoutForm() {
     }
 
     const [formData, setFormData] = useState(initialFormData);
+    const [tagsList, setTagsList] = useState([]);
 
     const resetForm = () => {
         setFormData(initialFormData);
+        setTagsList([]);
     }
 
     const handleSubmit = (e) => {
+        console.log('submit');
         e.preventDefault();
         resetForm();
         console.log(formData);
+        console.log(tagsList);
     }
 
     const handleChange = (e) => {
@@ -50,19 +56,55 @@ export default function WorkoutForm() {
         }))
     }
 
+    const handleEnterKey = (e) => { 
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (e.target.name === "workoutTag") {
+                handleEnterTag();
+            }
+        }  
+    }
+
+    const handleTagSelection = (_, value) => {
+        handleNewTag(value);
+    }
+
+    const handleEnterTag = () => {
+        const tag = formData.workoutTag.trim()
+        handleNewTag(tag);
+    }
+    
+    const handleNewTag = tag => {
+        if (tag !== "" && !tagsList.includes(tag)) {
+            setTagsList([...tagsList, tag]);
+        }
+        handleSetFormData("workoutTag", "");
+    }
+
+    const handleTagDelete = (tagtoDelete) => {
+        const updatedTags = tagsList.filter(tag => tag !== tagtoDelete);
+        setTagsList(updatedTags);
+    }
+
+    useEffect(() => {
+        console.log(tagsList);
+    }, [tagsList]);
+
     return (
     <div className = "container-fluid">
         <h3 className = "form-title">Add Workout</h3>
-        <form id = "workout-form" method="post" onSubmit={handleSubmit}>
+        <form id = "workout-form" method="post" onSubmit={handleSubmit} onKeyDown={handleEnterKey}>
                 <SearchField 
                     label = "Workout Name"
                     id = "workout-name"
                     name = "workoutName"
+                    width = "col-md-5"
                     placeholder = "Shoulder Press"
                     maxLength = "30"
                     searchableList = {workoutData.workouts}
                     search = {formData.workoutName}
-                    setFormData = {handleSetFormData}
+                    handleSearchChange = {handleSetFormData}
+                    handleSearchSelection = {handleSetFormData}
                 />
                 <div className="form-group col-md-3">
                     <label className="label" htmlFor="workoutDate">Date</label>
@@ -114,12 +156,15 @@ export default function WorkoutForm() {
                     label = "Tags"
                     id = "workout-tags"
                     name = "workoutTag"
+                    width = "col-md-3"
                     placeholder = "Add tags"
                     maxLength = "20"
-                    searchableList = {tags}
+                    searchableList = {tagsData}
                     search = {formData.workoutTag}
-                    setFormData = {handleSetFormData}
+                    handleSearchChange = {handleSetFormData}
+                    handleSearchSelection = {handleTagSelection}
                 />
+                <Tags tags = {tagsList} handleTagDelete = {handleTagDelete} />
                 <div className="button-container">
                     <button type="submit" className="btn btn-primary">Submit</button>
                     <button type = "button" className="btn btn-secondary" onClick={resetForm}>Reset</button>
