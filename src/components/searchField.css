@@ -38,4 +38,38 @@
     cursor: pointer;
 }
 
+
+.tags-input-container {
+    display: flex;
+    flex-direction: column;
+    width: 300px; /* Adjust as needed */
+  }
+  
+  .tags-input {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; /* Adjust the gap as needed */
+  }
+  
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0e0e0;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 4px;
+  }
   
