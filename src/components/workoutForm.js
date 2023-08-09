@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from "react";
 import "./workoutForm.css";
 import workoutData from "../workouts/workouts.json";
+// components
 import SearchField from "./searchField";
+import Tags from "./tags";
 
 export default function WorkoutForm() {
 
@@ -31,9 +33,11 @@ export default function WorkoutForm() {
 
     const resetForm = () => {
         setFormData(initialFormData);
+        setTagsList([]);
     }
 
     const handleSubmit = (e) => {
+        console.log('submit');
         e.preventDefault();
         resetForm();
         console.log(formData);
@@ -62,17 +66,24 @@ export default function WorkoutForm() {
     }
 
     const handleTagSelection = (_, value) => {
-        setTagsList([...tagsList, value]);
-        handleSetFormData("workoutTag", "");
+        handleNewTag(value);
     }
 
     const handleEnterTag = () => {
         const tag = formData.workoutTag.trim()
-        console.log(tag);
-        if (tag !== "") {
+        handleNewTag(tag);
+    }
+    
+    const handleNewTag = tag => {
+        if (tag !== "" && !tagsList.includes(tag)) {
             setTagsList([...tagsList, tag]);
         }
         handleSetFormData("workoutTag", "");
+    }
+
+    const handleTagDelete = (tagtoDelete) => {
+        const updatedTags = tagsList.filter(tag => tag !== tagtoDelete);
+        setTagsList(updatedTags);
     }
 
     useEffect(() => {
@@ -85,16 +96,15 @@ export default function WorkoutForm() {
         <form id = "workout-form" method="post" onSubmit={handleSubmit} onKeyDown={handleEnterKey}>
                 <SearchField 
                     label = "Workout Name"
-                    width = "col-md-5"
                     id = "workout-name"
                     name = "workoutName"
+                    width = "col-md-5"
                     placeholder = "Shoulder Press"
                     maxLength = "30"
                     searchableList = {workoutData.workouts}
                     search = {formData.workoutName}
                     handleSearchChange = {handleSetFormData}
                     handleSearchSelection = {handleSetFormData}
-                    tagsList = {tagsList}
                 />
                 <div className="form-group col-md-3">
                     <label className="label" htmlFor="workoutDate">Date</label>
@@ -144,17 +154,17 @@ export default function WorkoutForm() {
                 </div>
                 <SearchField 
                     label = "Tags"
-                    width = "col-md-8"
                     id = "workout-tags"
                     name = "workoutTag"
+                    width = "col-md-3"
                     placeholder = "Add tags"
                     maxLength = "20"
                     searchableList = {tagsData}
                     search = {formData.workoutTag}
                     handleSearchChange = {handleSetFormData}
                     handleSearchSelection = {handleTagSelection}
-                    tagsList = {tagsList}
                 />
+                <Tags tags = {tagsList} handleTagDelete = {handleTagDelete} />
                 <div className="button-container">
                     <button type="submit" className="btn btn-primary">Submit</button>
                     <button type = "button" className="btn btn-secondary" onClick={resetForm}>Reset</button>
