@@ -1,17 +1,15 @@
 import React, {useState, useEffect} from "react";
 import "./workoutForm.css";
+// data
 import workoutData from "../workouts/workouts.json";
+import workoutTagsData from "../workouts/workoutTags.json";
 // components
 import SearchField from "./searchField";
 import Tags from "./tags";
+// API helpers
+import createWorkout from "../api-requests.js";
 
 export default function WorkoutForm() {
-
-    let tagsData = [
-        "cardio",
-        "muscle",
-        "memory",
-    ]
 
     const currDate = new Date();
     const formattedDate = currDate.toISOString().split('T')[0];
@@ -37,11 +35,9 @@ export default function WorkoutForm() {
     }
 
     const handleSubmit = (e) => {
-        console.log('submit');
         e.preventDefault();
         resetForm();
-        console.log(formData);
-        console.log(tagsList);
+        createWorkout(formData, tagsList);
     }
 
     const handleChange = (e) => {
@@ -159,7 +155,7 @@ export default function WorkoutForm() {
                     width = "col-md-3"
                     placeholder = "Add tags"
                     maxLength = "20"
-                    searchableList = {tagsData}
+                    searchableList = {workoutTagsData.workoutTags}
                     search = {formData.workoutTag}
                     handleSearchChange = {handleSetFormData}
                     handleSearchSelection = {handleTagSelection}
